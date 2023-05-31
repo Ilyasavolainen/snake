@@ -1,0 +1,375 @@
+#include <iostream>
+#include <stdio.h>
+#include <ncurses.h> 
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+#include <thread>
+#include <vector>
+
+
+int height = 20;// переменные размера окна
+int width = 40;
+
+int j_1=19;
+int j_2=18;
+int snx, sny, snxf, snyf; //начало конец змеи
+int dirx, diry; //положение змеи
+ 
+using namespace std;
+ 
+int main()
+{
+    srand(time(NULL));
+    vector <int> fx(22);//за координаты ячеек змеи
+    vector <int> fy(22);
+    
+    
+    initscr();//инициализирует работу с консолью // Переход в curses-режим
+    raw();//Берём управление клавиатурой на себя
+    keypad(stdscr, TRUE);//включает режим простой работы с функциональными клавишами
+    noecho();//при вводе, вводимые символы не будут отображаться на экран
+    curs_set(0); // убираем курсор
+    halfdelay(1);//Устанавливаем ограничение по времени ожидания getch() в 1 сек
+    
+    chtype ch;
+    if (!has_colors()){                         // проверяет поддерживаются ли цвета вызовом функции
+  endwin();
+  printf("Цвета не поддерживаются");
+  exit(1);
+  }
+  start_color();
+  init_pair(1, COLOR_RED, COLOR_BLACK);       // устанавливаем цвет переменной
+   ch = 'x' | COLOR_PAIR(1); 
+   
+   
+   
+    WINDOW* win = newwin(height, width, 0, 0);                                   // устанавливаем окно нужной длины
+    box(win, 0, 0);
+    
+    int snx = width / 2, sny = height / 2;                                       // начало позиции змеи голова
+    int fex = rand() % (width - 2) + 1, fey = rand() % (height - 2) + 1;         // координаты еды
+    int size = 1;                                                                // длинна змеи
+    int dirx , diry;                                                        
+    
+    char gl='c';  // пробная переменная
+    
+    bool game_over = false;                                                      // пременная начала и конца игры
+    
+    fx[0] = width / 2, fy[0] = height / 2;                                     // первая  часть змеи
+    fx[0]--;
+    fx[1] = width / 2, fy[1] = height / 2;                                     // вторая часть змеи
+    fx[1]++;
+    fx[2] = width / 2, fy[2] = height / 2;                                     // третья часть змеи
+    fx[2]+=2;
+    fx[3] = width / 2, fy[3] = height / 2;                                     //  часть змеи
+    fx[3]+=3;
+    
+ 
+    
+    
+    
+    
+    while (!game_over)
+    {   mvwprintw(stdscr,  0, 30, "Rabbit - %d ", size-1);//выводит на экран колличество
+    
+                                                 // избавляемся от хвоста змеи
+        mvwaddch(win, fy[3], fx[3], ' ');
+        
+       if( dirx == -1 and diry == 0){
+           
+         fx[0]=snx;
+         fy[0]=sny;
+         fx[0]--;
+         fy[19]=fy[18];
+         fx[19]=fx[18];
+         fy[18]=fy[17];
+         fx[18]=fx[17];
+         fy[17]=fy[16];
+         fx[17]=fx[16];
+         fy[16]=fy[15];
+         fx[16]=fx[15];
+         fy[15]=fy[14];
+         fx[15]=fx[14];
+         fy[14]=fy[13];
+         fx[14]=fx[13];
+         fy[13]=fy[12];
+         fx[13]=fx[12];
+         fy[12]=fy[11];
+         fx[12]=fx[11];
+         fy[11]=fy[10];
+         fx[11]=fx[10];
+         fy[10]=fy[9];
+         fx[10]=fx[9];
+         fy[9]=fy[8];
+         fx[9]=fx[8];
+         fy[8]=fy[7];
+         fx[8]=fx[7];
+         fy[7]=fy[6];
+         fx[7]=fx[6];
+         fy[6]=fy[5];
+         fx[6]=fx[5];
+         fy[5]=fy[4];
+         fx[5]=fx[4];
+         fy[4]=fy[3];
+         fx[4]=fx[3];
+         fy[3]=fy[2];
+         fx[3]=fx[2];
+         fy[2]=fy[1];
+         fx[2]=fx[1];
+         fy[1]=sny;
+         fx[1]=snx;
+         snx += dirx;
+         sny += diry;
+         
+       }
+        if( dirx == 1 and diry == 0){
+            
+            
+         fx[0]=snx;
+         fy[0]=sny;
+         fx[0]++;
+         fy[19]=fy[18];
+         fx[19]=fx[18];
+         fy[18]=fy[17];
+         fx[18]=fx[17];
+         fy[17]=fy[16];
+         fx[17]=fx[16];
+         fy[16]=fy[15];
+         fx[16]=fx[15];
+         fy[15]=fy[14];
+         fx[15]=fx[14];
+         fy[14]=fy[13];
+         fx[14]=fx[13];
+         fy[13]=fy[12];
+         fx[13]=fx[12];
+         fy[12]=fy[11];
+         fx[12]=fx[11];
+         fy[11]=fy[10];
+         fx[11]=fx[10];
+         fy[10]=fy[9];
+         fx[10]=fx[9];
+         fy[9]=fy[8];
+         fx[9]=fx[8];
+         fy[8]=fy[7];
+         fx[8]=fx[7];
+         fy[7]=fy[6];
+         fx[7]=fx[6];
+         fy[6]=fy[5];
+         fx[6]=fx[5];
+         fy[5]=fy[4];
+         fx[5]=fx[4];
+         fy[4]=fy[3];
+         fx[4]=fx[3];
+         fy[3]=fy[2];
+         fx[3]=fx[2];
+         fy[2]=fy[1];
+         fx[2]=fx[1];
+         fy[1]=sny;
+         fx[1]=snx;
+         snx += dirx;
+         sny += diry;
+         
+       }
+       if( dirx == 0 and diry == -1){
+           
+         fx[0]=snx;
+         fy[0]=sny;
+         fy[0]--;
+        fy[19]=fy[18];
+         fx[19]=fx[18];
+         fy[18]=fy[17];
+         fx[18]=fx[17];
+         fy[17]=fy[16];
+         fx[17]=fx[16];
+         fy[16]=fy[15];
+         fx[16]=fx[15];
+         fy[15]=fy[14];
+         fx[15]=fx[14];
+         fy[14]=fy[13];
+         fx[14]=fx[13];
+         fy[13]=fy[12];
+         fx[13]=fx[12];
+         fy[12]=fy[11];
+         fx[12]=fx[11];
+         fy[11]=fy[10];
+         fx[11]=fx[10];
+         fy[10]=fy[9];
+         fx[10]=fx[9];
+         fy[9]=fy[8];
+         fx[9]=fx[8];
+         fy[8]=fy[7];
+         fx[8]=fx[7];
+         fy[7]=fy[6];
+         fx[7]=fx[6];
+         fy[6]=fy[5];
+         fx[6]=fx[5];
+         fy[5]=fy[4];
+         fx[5]=fx[4];
+         fy[4]=fy[3];
+         fx[4]=fx[3];
+         fy[3]=fy[2];
+         fx[3]=fx[2];
+         fy[2]=fy[1];
+         fx[2]=fx[1];
+         fy[1]=sny;
+         fx[1]=snx;
+         snx += dirx;
+         sny += diry;
+       }
+        if( dirx == 0 and diry == 1){
+            
+         fx[0]=snx;
+         fy[0]=sny;
+         fy[0]++;
+         fy[19]=fy[18];
+         fx[19]=fx[18];
+         fy[18]=fy[17];
+         fx[18]=fx[17];
+         fy[17]=fy[16];
+         fx[17]=fx[16];
+         fy[16]=fy[15];
+         fx[16]=fx[15];
+         fy[15]=fy[14];
+         fx[15]=fx[14];
+         fy[14]=fy[13];
+         fx[14]=fx[13];
+         fy[13]=fy[12];
+         fx[13]=fx[12];
+         fy[12]=fy[11];
+         fx[12]=fx[11];
+         fy[11]=fy[10];
+         fx[11]=fx[10];
+         fy[10]=fy[9];
+         fx[10]=fx[9];
+         fy[9]=fy[8];
+         fx[9]=fx[8];
+         fy[8]=fy[7];
+         fx[8]=fx[7];
+         fy[7]=fy[6];
+         fx[7]=fx[6];
+         fy[6]=fy[5];
+         fx[6]=fx[5];
+         fy[5]=fy[4];
+         fx[5]=fx[4];
+         fy[4]=fy[3];
+         fx[4]=fx[3];
+         fy[3]=fy[2];
+         fx[3]=fx[2];
+         fy[2]=fy[1];
+         fx[2]=fx[1];
+         fy[1]=sny;
+         fx[1]=snx;
+         snx += dirx;
+         sny += diry;
+       }
+        
+        if (snx <= 0 || snx >= width-1 || sny <= 0 || sny >= height-1) {  // если преходит границу игра заканчивается
+            game_over = true;
+            break;
+        }
+        
+        // координаты появления змеи и еды
+        mvwaddch(win, fy[0], fx[0], ' ');
+        mvwaddch(win, sny, snx, '*');//переменные отвечают за голову змеи
+        mvwaddch(win, fy[1], fx[1], '*');
+        mvwaddch(win, fy[2], fx[2], '*');
+        snxf=fx[3]; 
+        snyf=fy[3];
+        
+        int r0 =1;
+        int r1 = 3;
+        int r2 = 4;
+        for( int d=3; d<18; d++){
+        if (size>r0){
+                mvwaddch(win, fy[r1], fx[r1], '*');
+                snxf=fx[r2]; 
+                snyf=fy[r2];
+                r0++;
+                r1++;
+                r2++;
+            } 
+        }    
+        
+         if (size>15){
+        
+               game_over = true;
+                break;
+        } 
+        mvwaddch(win, snyf, snxf, ' ');
+       
+        mvwaddch(win, fey, fex, ch);
+
+        //сохранение в переменную нажатую кнопку
+        
+        int ch = getch(); // Ожидание нажатия какой-либо клавиши пользователем
+
+        switch (ch)
+        {   
+            case KEY_UP:
+                dirx = 0;
+                diry = -1;
+                break;
+            case KEY_DOWN:
+                dirx = 0;
+                diry = 1;
+                
+                break;
+            case KEY_LEFT:
+                dirx = -1;
+                diry = 0;
+                
+                break;
+            case KEY_RIGHT:
+                dirx = 1;
+                diry = 0;
+                
+                break;
+            case 'q':
+            case 'Q':
+                game_over = true;
+                break;
+            case ERR:
+            dirx=dirx;
+            diry=diry;
+             //Если нажатия не было
+            break;   
+        }
+        
+        // если змея встречается с едой
+        if (snx == fex && sny == fey)
+        {
+            fex = rand() % (width - 2) + 1;
+            fey = rand() % (height - 2) + 1;
+            size++;
+        }
+        
+     // for(int t=10; t<18; t++){                 // если змея сталкивается сама с собой
+     //   if (snx == fx[t] && sny == fy[t])
+     //   {
+      //      game_over = true;
+      //  }
+     // }
+        
+        if (size > 25) {
+            mvwaddch(win, sny - diry, snx - dirx, ' ');
+        }
+        
+        wrefresh(win);  //обновляет
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    
+    
+    if (size > 15) {
+            mvprintw(height/2, width/2-5, "You WIN");
+            
+        }
+    else{    
+    mvprintw(height/2, width/2-5, "GAME OVER");
+    }
+    refresh();//обновляет только изменившиеся зоны экрана
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    
+    endwin();  
+    return 0;
+}
